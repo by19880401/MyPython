@@ -34,8 +34,16 @@ b = Animal()
 c = Cat()
 
 result_a = isinstance(a, list)
-print(result_a)
+print(result_a) # True，a是list类型
 result_b = isinstance(b, Animal)
-print(result_b)
-result_c = isinstance(c, Animal)
-print(result_c)
+print(result_b) # True，b是Animal类型
+result_c = isinstance(c, Cat)
+print(result_c) # True, c是Cat类型
+
+result_cc = isinstance(c, Animal)
+print(result_cc) # True, c也是Animal类型
+
+result_bb = isinstance(b, Cat)
+print(result_bb) # False, b Animal却不是Cat类型
+
+
