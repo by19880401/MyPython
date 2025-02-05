@@ -3,9 +3,10 @@
 
 """定义一个正常的Cup类，它没有任何属性"""
 class Cup(object):
+    __slots__ = ("name", "age") # 用tuple定义允许绑定的属性名称
     pass
 
-"""******开始测试******"""
+"""*****开始测试*****"""
 cup = Cup()
 cup.name = "I'm a Cup" # 动态给实例绑定一个属性
 print(cup.name) # 正常case，打印结果：I'm a Cup
