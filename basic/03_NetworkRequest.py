@@ -3,4 +3,4 @@
 import requests
 
 response = requests.get("https://baidu.com/")
-print(response.status_code)
+print(f"status code: {response.status_code},{response.text}")
