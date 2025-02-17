@@ -25,7 +25,19 @@ class OpenDefaultCamera:
             break;
 
         # 显示图像窗口
-        cv2.imshow("frame", frame);
+        # cv2.imshow("frame", frame);
+
+        # 将图像转化为灰度
+        # gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # cv2.imshow('frame', gray_frame);
+
+        # rotate_90_frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE); # 旋转90度
+        rotate_180_frame = cv2.rotate(frame, cv2.ROTATE_180); # 旋转180度
+        # cv2.imshow("Rotate 180", rotate_90_frame);
+
+        # 应用边缘检测
+        edges = cv2.Canny(rotate_180_frame, 100, 100);
+        cv2.imshow("edges", edges);
 
         # 按q退出
         # if cv2.waitKey(1) & 0xFF == ord('q'):
