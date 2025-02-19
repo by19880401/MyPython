@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ObTypes import *
 from Property import *
 import Pipeline
@@ -6,6 +7,9 @@ import Version
 
 import cv2
 import numpy as np
+
+"""调用orbbec彩色和深度相机，实现物体识别及测距离"""
+
 
 # 初始化模型
 net = cv2.dnn.readNet("dnn_model/yolov4-tiny.weights",
@@ -27,7 +31,7 @@ print(f"Orbbec SDK Version: {version.getMajor()}.{version.getMinor()}.{version.g
 
 try:
     pipe = Pipeline.Pipeline(None, None)
-    config = Pipeline.Config()
+    config = Pipeline.Config() # 读取配置文件：OrbbecSDKConfig_v1.0.xml
     profiles = pipe.getStreamProfileList(OB_PY_SENSOR_COLOR)
     videoProfile = profiles.getProfile(0)
     colorProfile = videoProfile.toConcreteStreamProfile(OB_PY_STREAM_VIDEO)
@@ -37,8 +41,10 @@ try:
 
     pipe.start(config, None)
 
+    # 检查镜像属性是否有可写的权限
     if pipe.getDevice().isPropertySupported(OB_PY_PROP_COLOR_MIRROR_BOOL, OB_PY_PERMISSION_WRITE):
         pipe.getDevice().setBoolProperty(OB_PY_PROP_COLOR_MIRROR_BOOL, True)
+
 
     while True:
         frameSet = pipe.waitForFrames(100);
@@ -73,8 +79,6 @@ try:
                 newData = cv2.cvtColor(newData, cv2.COLOR_YUV2BGR_I420)
                 newData = cv2.resize(newData, (windowsWidth, windowsHeight))
 
-            # cv2.namedWindow("Model Detect", cv2.WINDOW_NORMAL)
-
             # 物体检测
             (class_ids, scores, bboxes) = model.detect(newData)
             for class_id, score, bbox in zip(class_ids, scores, bboxes):  # 将多帧数据打包重组成单帧
@@ -83,9 +87,9 @@ try:
                 cv2.rectangle(newData, (x, y), (x + w, y + h), (255, 0, 0), 3)  # 画面，左上角坐标，右下角坐标，RGB颜色，厚度
                 cv2.putText(newData, class_name +", haha12", (x, y - 10), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0),
                             3)  # 画面，文本内容，位置，字体，字体大小，RGB颜色，厚度
-                print("class id", class_id)  # 分类结果
+                print(f"class id: {class_id}, class name: {class_name}")  # 分类结果
                 print("score", score)  # 准确度
-                print("bboxe", bbox)  # 识别框的位置信息
+                print("bbox", bbox)  # 识别框的位置信息
 
             if newData is not None:
                 cv2.imshow("Model Detect", newData)
