@@ -8,7 +8,7 @@ import Version
 import cv2
 import numpy as np
 
-"""调用orbbec彩色相机，实现物体识别"""
+"""基于MainClient1.py"""
 
 
 # 初始化模型
